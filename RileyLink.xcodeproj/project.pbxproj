@@ -42,6 +42,7 @@
 		C12EA26D198B456D00309FA4 /* NightscoutWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12EA26C198B456D00309FA4 /* NightscoutWebView.m */; };
 		C13DB3A51B1583E900121E02 /* MessageBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C13DB3A41B1583E900121E02 /* MessageBase.m */; };
 		C14AA33B1B1A2FB100299A55 /* MeterMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C14AA33A1B1A2FB100299A55 /* MeterMessage.m */; };
+		C16F3FB71B86E902008B1344 /* MinimedPump.m in Sources */ = {isa = PBXBuildFile; fileRef = C16F3FB61B86E902008B1344 /* MinimedPump.m */; };
 		C1743CDF199D374500ED623E /* PumpStatusMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C1743CDE199D374500ED623E /* PumpStatusMessage.m */; };
 		C174F26B19EB824D00398C72 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = C174F26A19EB824D00398C72 /* ISO8601DateFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C1A47EBF1B117DE900756B99 /* NightScoutUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A47EBE1B117DE900756B99 /* NightScoutUploader.m */; };
@@ -126,6 +127,8 @@
 		C13DB3A41B1583E900121E02 /* MessageBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBase.m; sourceTree = "<group>"; };
 		C14AA3391B1A2FB100299A55 /* MeterMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterMessage.h; sourceTree = "<group>"; };
 		C14AA33A1B1A2FB100299A55 /* MeterMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeterMessage.m; sourceTree = "<group>"; };
+		C16F3FB51B86E902008B1344 /* MinimedPump.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinimedPump.h; sourceTree = "<group>"; };
+		C16F3FB61B86E902008B1344 /* MinimedPump.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinimedPump.m; sourceTree = "<group>"; };
 		C1743CDD199D374500ED623E /* PumpStatusMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PumpStatusMessage.h; sourceTree = "<group>"; };
 		C1743CDE199D374500ED623E /* PumpStatusMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PumpStatusMessage.m; sourceTree = "<group>"; };
 		C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISO8601DateFormatter.h; sourceTree = "<group>"; };
@@ -265,6 +268,7 @@
 				C1EF58981B3FA7D1001C8C80 /* RileyLink */,
 				C1EF58891B3F9730001C8C80 /* SWRevealViewController */,
 				C14B4EDF1B85A31F00776647 /* MinimedMessages */,
+				C16F3FB41B86E8E1008B1344 /* MinimedPump */,
 				C12964E91B1581D200516761 /* MinimedRF */,
 				C1AA398B1AB67F6A00BC9E33 /* Categories */,
 				C174F26919EB824D00398C72 /* ISO8601DateFormatter.h */,
@@ -324,6 +328,15 @@
 				C14AA33A1B1A2FB100299A55 /* MeterMessage.m */,
 			);
 			name = MinimedMessages;
+			sourceTree = "<group>";
+		};
+		C16F3FB41B86E8E1008B1344 /* MinimedPump */ = {
+			isa = PBXGroup;
+			children = (
+				C16F3FB51B86E902008B1344 /* MinimedPump.h */,
+				C16F3FB61B86E902008B1344 /* MinimedPump.m */,
+			);
+			name = MinimedPump;
 			sourceTree = "<group>";
 		};
 		C1AA398B1AB67F6A00BC9E33 /* Categories */ = {
@@ -518,6 +531,7 @@
 				C1AA39941AB6804000BC9E33 /* UIAlertView+Blocks.m in Sources */,
 				C12616701B7790DF001FAD87 /* SendDataTask.m in Sources */,
 				C126162C1B65E9BF001FAD87 /* RileyLinkDeviceViewController.m in Sources */,
+				C16F3FB71B86E902008B1344 /* MinimedPump.m in Sources */,
 				C1EF58881B3F93FE001C8C80 /* Config.m in Sources */,
 				C126164B1B685F93001FAD87 /* RileyLink.xcdatamodeld in Sources */,
 				C126165D1B6C8076001FAD87 /* PacketGeneratorViewController.m in Sources */,

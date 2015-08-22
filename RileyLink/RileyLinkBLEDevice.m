@@ -71,7 +71,8 @@
     currentSendTask = sendTasks[0];
     copiesLeftToSend = currentSendTask.repeatCount;
     [sendTasks removeObjectAtIndex:0];
-    NSLog(@"Prepping for send: %@", [currentSendTask.data hexadecimalString]);
+    NSLog(@"writing to TX buffer: %@", [currentSendTask.data hexadecimalString]);
+    NSLog(@"current tx attr: %@", packetTxCharacteristic);
     [self.peripheral writeValue:currentSendTask.data forCharacteristic:packetTxCharacteristic type:CBCharacteristicWriteWithResponse];
   }
 }
@@ -94,6 +95,7 @@
     currentSendTask = nil;
     [sendTimer invalidate];
     sendTimer = nil;
+    [self dequeueSendTasks];
   }
 }
 
@@ -102,6 +104,7 @@
   sendTimer = nil;
   copiesLeftToSend = 0;
   currentSendTask = nil;
+  [self dequeueSendTasks];
 }
 
 - (void) setRXChannel:(unsigned char)channel {
@@ -129,9 +132,12 @@
     return;
   }
   if (characteristic == packetTxCharacteristic) {
+    NSLog(@"Did write to TX buffer: %@", characteristic);
     [self triggerSend];
   }
-  NSLog(@"Did write characteristic: %@", characteristic);
+  else {
+    NSLog(@"Did write: %@", characteristic);
+  }
 }
 
 - (RileyLinkState) state {
@@ -167,6 +173,12 @@
   [[RileyLinkBLEManager sharedManager] disconnectRileyLink:self];
 }
 
+
+- (void) didDisconnect:(NSError*)error {
+  if (currentSendTask) {
+    [self cancelSending];
+  }
+}
    
 - (void)updateBatteryLevel {
   [self.peripheral readValueForCharacteristic:batteryCharacteristic];
@@ -254,7 +266,7 @@
                               };
       [[NSNotificationCenter defaultCenter] postNotificationName:RILEY_LINK_EVENT_PACKET_RECEIVED object:self userInfo:attrs];
     }
-    [peripheral readValueForCharacteristic:packetCountCharacteristic];
+    [peripheral readValueForCharacteristic:packetRxCharacteristic];
     
   } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_BATTERY_UUID]]) {
     //batteryPct = ((const unsigned char*)[characteristic.value bytes])[0];
@@ -271,6 +283,11 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
   
+  if (error != nil) {
+    NSLog(@"Error updating notification state for %@: %@", characteristic, error);
+    return;
+  }
+  
   if (![characteristic.UUID isEqual:[CBUUID UUIDWithString:GLUCOSELINK_PACKET_COUNT]]) {
     return;
   }
@@ -278,7 +295,7 @@
   if (characteristic.isNotifying) {
     NSLog(@"Notification began on %@", characteristic);
   } else {
-    // Notification has stopped
+    NSLog(@"Notification stopped on %@", characteristic);
   }
 }
 

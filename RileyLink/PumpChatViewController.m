@@ -16,6 +16,10 @@
   IBOutlet UILabel *resultsLabel;
   IBOutlet UILabel *batteryVoltage;
   IBOutlet UILabel *pumpIdLabel;
+
+  BOOL waitingForWakeup;
+  BOOL waitingForTempBasalHeaderAck;
+  BOOL waitingForTempBasalArgsAck;
 }
 
 @end
@@ -56,38 +60,39 @@
   
   NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@5D00", pumpId];
   NSData *data = [NSData dataWithHexadecimalString:packetStr];
+  waitingForWakeup = YES;
   [_device sendPacketData:[MinimedPacket encodeData:data] withCount:100 andTimeBetweenPackets:0.078];
 }
 
 - (void)handlePacketFromPump:(MinimedPacket*)p {
   if (p.messageType == MESSAGE_TYPE_PUMP_STATUS_ACK) {
-    resultsLabel.text = @"Pump acknowleged wakeup!";
-    // Send query for pump model #
-    NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", [[Config sharedInstance] pumpID], MESSAGE_TYPE_GET_PUMP_MODEL];
-    NSData *data = [NSData dataWithHexadecimalString:packetStr];
-    [_device sendPacketData:[MinimedPacket encodeData:data]];
-  } else if (p.messageType == MESSAGE_TYPE_GET_PUMP_MODEL) {
-    //unsigned char len = [p.data bytes][6];
-    NSString *version = [NSString stringWithCString:&[p.data bytes][7] encoding:NSASCIIStringEncoding];
-    resultsLabel.text = [@"Pump Model: " stringByAppendingString:version];
-    
-    // Send query for battery status
-    NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", [[Config sharedInstance] pumpID], MESSAGE_TYPE_GET_BATTERY];
-    NSData *data = [NSData dataWithHexadecimalString:packetStr];
-    [_device sendPacketData:[MinimedPacket encodeData:data]];
-    
-    
-    
-  } else if (p.messageType == MESSAGE_TYPE_GET_BATTERY) {
-    unsigned char *data = (unsigned char *)[p.data bytes] + 6;
-    
-    NSInteger volts = (((int)data[1]) << 8) + data[2];
-    NSString *indicator = data[0] ? @"Low" : @"Normal";
-    batteryVoltage.text = [indicator stringByAppendingFormat:@"%0.02f", volts/100.0];
+    if (waitingForWakeup) {
+      waitingForWakeup = NO;
+      resultsLabel.text = @"Pump acknowleged wakeup!";
+      NSLog(@"Acked wakeup");
+      // set temp basal header
+      NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x00", [[Config sharedInstance] pumpID], MESSAGE_TYPE_TEMP_BASAL];
+      NSData *pdata = [NSData dataWithHexadecimalString:packetStr];
+      waitingForTempBasalHeaderAck = YES;
+      [_device sendPacketData:[MinimedPacket encodeData:pdata]];
+    }
+    else if (waitingForTempBasalHeaderAck) {
+      waitingForTempBasalHeaderAck = NO;
+      resultsLabel.text = @"Pump acked basal header!";
+      NSLog(@"Acked basal header");
+      // set temp basal with args
+      NSString *packetStr = [@"a7" stringByAppendingFormat:@"%@%02x0300010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", [[Config sharedInstance] pumpID], MESSAGE_TYPE_TEMP_BASAL];
+      NSData *pdata = [NSData dataWithHexadecimalString:packetStr];
+      waitingForTempBasalArgsAck = YES;
+      [_device sendPacketData:[MinimedPacket encodeData:pdata]];
+    }
+    else if (waitingForTempBasalHeaderAck) {
+      waitingForTempBasalHeaderAck = NO;
+      NSLog(@"Acked basal args");
+      resultsLabel.text = @"Pump acked basal args!";
+    }
   }
-  
 }
-
 
 - (void)packetReceived:(NSNotification*)notification {
   if (notification.object == self.device) {

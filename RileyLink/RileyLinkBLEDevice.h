@@ -28,6 +28,7 @@ typedef enum {
 - (RileyLinkState) state;
 - (void) connect;
 - (void) disconnect;
+- (void) didDisconnect:(NSError*)error;
 - (void) cancelSending;
 - (void) setRXChannel:(unsigned char)channel;
 - (void) setTXChannel:(unsigned char)channel;
