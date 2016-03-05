@@ -13,7 +13,6 @@
 #import "SendAndListenCmd.h"
 #import "GetPacketCmd.h"
 #import "GetVersionCmd.h"
-#import "UIAlertView+Blocks.h"
 
 
 // See impl at bottom of file.
@@ -206,7 +205,7 @@
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_CUSTOM_NAME_UUID]]) {
       customNameCharacteristic = characteristic;
     } else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:RILEYLINK_TIMER_TICK_UUID]]) {
-      [self.peripheral setNotifyValue:YES forCharacteristic:characteristic];
+      [self.peripheral setNotifyValue:NO forCharacteristic:characteristic];
       timerTickCharacteristic = characteristic;
     }
   }
@@ -288,11 +287,8 @@
         } else {
           msg = @"Communication issue with RileyLink. Please power cycle the RileyLink and try again.";
         }
-        [UIAlertView showWithTitle:@"Firmware version check failed."
-                           message:msg
-                 cancelButtonTitle:@"OK"
-                 otherButtonTitles:nil
-                          tapBlock:nil];
+
+        NSLog(@"Firmware version check failed: %@", msg);
       });
     }
   }];
@@ -450,7 +446,7 @@
     // This is a response to our idle listen command
     MinimedPacket *packet = [[MinimedPacket alloc] initWithData:response];
     packet.capturedAt = [NSDate date];
-    [incomingPackets addObject:packet];
+//    [incomingPackets addObject:packet];
     NSLog(@"Read packet (%d): %@", packet.rssi, packet.data.hexadecimalString);
     NSDictionary *attrs = @{
                             @"packet": packet,
