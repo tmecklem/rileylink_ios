@@ -72,7 +72,7 @@
 }
 
 
-- (MinimedPacket*) sendAndListen:(NSData*)msg
+- (nullable MinimedPacket*) sendAndListen:(nonnull NSData*)msg
                        timeoutMS:(uint16_t)timeoutMS
                           repeat:(uint8_t)repeat
                 msBetweenPackets:(uint8_t)msBetweenPackets
@@ -93,12 +93,24 @@
   return rxPacket;
 }
 
-- (MinimedPacket*) sendAndListen:(NSData*)msg {
+- (nullable MinimedPacket*) sendAndListen:(nonnull NSData*)msg {
   return [self sendAndListen:msg
                    timeoutMS:STANDARD_PUMP_RESPONSE_WINDOW
                       repeat:0
             msBetweenPackets:0
                   retryCount:3];
+}
+
+- (nullable NSData *) sendData:(nonnull NSData *)data andListenForResponseType:(uint8_t)responseType {
+  if ([self wakeIfNeeded]) {
+    MinimedPacket *packet = [self sendAndListen:data];
+
+    if (packet != nil && packet.messageType == responseType) {
+      return packet.data;
+    }
+  }
+
+  return nil;
 }
 
 - (BOOL) wakeIfNeeded {

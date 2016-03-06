@@ -24,4 +24,14 @@
 - (NSDictionary* _Nonnull) getHistoryPage:(uint8_t)pageNum;
 @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSDictionary * _Nonnull scanForPump;
 
+/**
+ Send some data and wait for a response, with a default timeout and repeat interval.
+
+ @param data         The data to send
+ @param responseType The response type to expect
+
+ @return The response data
+ */
+- (nullable NSData *) sendData:(nonnull NSData *)data andListenForResponseType:(uint8_t)responseType;
+
 @end
