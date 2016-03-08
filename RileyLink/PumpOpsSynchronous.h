@@ -25,6 +25,17 @@
 @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSDictionary * _Nonnull scanForPump;
 
 /**
+ Send some data and wait for a response, with a default timeout.
+
+ @param data         The data to send
+ @param retryCount   The number of retries
+ @param responseType The response type to expect
+
+ @return The response data
+ */
+- (nullable NSData *) sendData:(nonnull NSData *)data retryCount:(NSUInteger)retryCount andListenForResponseType:(uint8_t)responseType;
+
+/**
  Send some data and wait for a response, with a default timeout and repeat interval.
 
  @param data         The data to send

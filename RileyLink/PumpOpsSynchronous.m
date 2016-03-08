@@ -101,9 +101,13 @@
                   retryCount:3];
 }
 
-- (nullable NSData *) sendData:(nonnull NSData *)data andListenForResponseType:(uint8_t)responseType {
+- (NSData *)sendData:(NSData *)data retryCount:(NSUInteger)retryCount andListenForResponseType:(uint8_t)responseType {
   if ([self wakeIfNeeded]) {
-    MinimedPacket *packet = [self sendAndListen:data];
+    MinimedPacket *packet = [self sendAndListen:data
+                                      timeoutMS:STANDARD_PUMP_RESPONSE_WINDOW
+                                         repeat:0
+                               msBetweenPackets:0
+                                     retryCount:retryCount];
 
     if (packet != nil && packet.messageType == responseType) {
       return packet.data;
@@ -111,6 +115,10 @@
   }
 
   return nil;
+}
+
+- (nullable NSData *) sendData:(nonnull NSData *)data andListenForResponseType:(uint8_t)responseType {
+  return [self sendData:data retryCount:3 andListenForResponseType:responseType];
 }
 
 - (BOOL) wakeIfNeeded {

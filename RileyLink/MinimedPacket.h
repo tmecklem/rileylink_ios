@@ -34,6 +34,7 @@ typedef NS_ENUM(unsigned char, MessageType) {
   MESSAGE_TYPE_GET_PUMP_MODEL = 0x8d,
   MESSAGE_TYPE_GET_BATTERY = 0x72,
   MESSAGE_TYPE_READ_HISTORY = 0x80,
+  MESSAGE_TYPE_READ_TEMP_BASAL = 0x98
 };
 
 @property (NS_NONATOMIC_IOSONLY, readonly, strong) MessageBase * _Nullable toMessage;
