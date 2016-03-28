@@ -31,6 +31,7 @@
   NSData *endOfResponseMarker;
   BOOL idleListeningEnabled;
   uint8_t idleListenChannel;
+  uint16_t _idleTimeout;
   BOOL fetchingResponse;
   CmdBase *currentCommand;
   BOOL runningIdle;
@@ -62,6 +63,8 @@
     
     cmdDispatchGroup = dispatch_group_create();
     idleDetectDispatchGroup = dispatch_group_create();
+
+    _idleTimeout = 60 * 1000;
 
     incomingPackets = [NSMutableArray array];
     
@@ -113,9 +116,7 @@
   dispatch_group_notify(idleDetectDispatchGroup,
                         dispatch_get_main_queue(), ^{
                           NSLog(@"idleDetectDispatchGroup empty");
-                          if (!runningIdle && !runningSession) {
-                            [self onIdle];
-                          }
+                          [self assertIdleListening];
                         });
 }
 
@@ -181,9 +182,7 @@
 {
   switch (self.peripheral.state) {
     case CBPeripheralStateConnected:
-      if (idleListeningEnabled) {
-        [self onIdle];
-      }
+      [self assertIdleListening];
       break;
     case CBPeripheralStateDisconnected:
       runningIdle = NO;
@@ -424,7 +423,7 @@
     NSLog(@"Starting idle RX");
     GetPacketCmd *cmd = [[GetPacketCmd alloc] init];
     cmd.listenChannel = idleListenChannel;
-    cmd.timeoutMS = 65 * 1000;
+    cmd.timeoutMS = _idleTimeout;
     [self issueCommand:cmd];
 
     _lastIdle = [NSDate date];
@@ -434,14 +433,23 @@
 - (void) enableIdleListeningOnChannel:(uint8_t)channel {
   idleListeningEnabled = YES;
   idleListenChannel = channel;
-  if (!runningIdle && !runningSession) {
-    [self onIdle];
-  }
+
+  [self assertIdleListening];
 }
 
 - (void) disableIdleListening {
   idleListeningEnabled = NO;
   runningIdle = NO;
+}
+
+- (void) assertIdleListening {
+  if (idleListeningEnabled && !runningSession) {
+    NSTimeInterval resetIdleAfterInterval = 2.0 * (float)_idleTimeout / 1000.0;
+
+    if (!runningIdle || ([NSDate dateWithTimeIntervalSinceNow:-resetIdleAfterInterval] > _lastIdle)) {
+      [self onIdle];
+    }
+  }
 }
 
 - (void) handleIdleListenerResponse:(NSData *)response {
