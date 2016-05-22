@@ -63,6 +63,7 @@ public enum PumpEventType: UInt8 {
     case ChangeWatchdogMarriageProfile = 0x81
     case DeleteOtherDeviceID = 0x82
     case ChangeCaptureEventEnable = 0x83
+    case Questionable3b = 0x3b
     
     var eventType: PumpEvent.Type {
         switch self {
@@ -176,6 +177,8 @@ public enum PumpEventType: UInt8 {
             return DeleteOtherDeviceIDPumpEvent.self
         case .ChangeCaptureEventEnable:
             return ChangeCaptureEventEnablePumpEvent.self
+        case .Questionable3b:
+            return Questionable3bPumpEvent.self
         }
     }
 }
