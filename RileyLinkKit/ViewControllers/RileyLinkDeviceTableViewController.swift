@@ -353,7 +353,7 @@ public class RileyLinkDeviceTableViewController: UITableViewController {
                     let oneDayAgo = calendar.dateByAddingUnit(.Day, value: -1, toDate: NSDate(), options: [])
                     self.device.ops?.getHistoryEventsSinceDate(oneDayAgo!) { (response) -> Void in
                         switch response {
-                        case .Success(let (events, _)):
+                        case .Success(let events):
                             var responseText = String(format:"Found %d events since %@", events.count, oneDayAgo!)
                             for event in events {
                                 responseText += String(format:"\nEvent: %@", event.dictionaryRepresentation)

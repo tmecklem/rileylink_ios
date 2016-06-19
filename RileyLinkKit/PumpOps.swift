@@ -95,15 +95,26 @@ public class PumpOps {
             }
         }
     }
-    
-    public func getHistoryEventsSinceDate(startDate: NSDate, completion: (Either<(events: [TimestampedHistoryEvent], pumpModel: PumpModel), ErrorType>) -> Void) {
+
+    /**
+     Fetches history entries which occurred after the specified date.
+ 
+     History timestamps are reconciled with UTC based on the `timeZone` property of PumpState, as well as recorded clock change events.
+
+     - parameter startDate:  The date after which events must have occurred
+     - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
+        - Success(events): An array of fetched history entries
+        - Failure(error):  An error describing why the command failed
+
+     */
+    public func getHistoryEventsSinceDate(startDate: NSDate, completion: (Either<[TimestampedHistoryEvent], ErrorType>) -> Void) {
         device.runSession { (session) -> Void in
             NSLog("History fetching task started.")
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
-                let (events, pumpModel) = try ops.getHistoryEventsSinceDate(startDate)
+                let events = try ops.getHistoryEventsSinceDate(startDate)
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    completion(.Success(events: events, pumpModel: pumpModel))
+                    completion(.Success(events))
                 })
             } catch let error {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in

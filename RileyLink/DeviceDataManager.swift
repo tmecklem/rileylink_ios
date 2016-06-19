@@ -198,9 +198,9 @@ class DeviceDataManager {
         lastHistoryAttempt = NSDate()
         device.ops!.getHistoryEventsSinceDate(observingPumpEventsSince) { (response) -> Void in
             switch response {
-            case .Success(let (events, pumpModel)):
+            case .Success(let events):
                 NSLog("fetchHistory succeeded.")
-                self.handleNewHistoryEvents(events, pumpModel: pumpModel)
+                self.handleNewHistoryEvents(events)
                 NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.PumpEventsUpdatedNotification, object: self)
                 
             case .Failure(let error):
@@ -209,9 +209,10 @@ class DeviceDataManager {
         }
     }
     
-    private func handleNewHistoryEvents(events: [TimestampedHistoryEvent], pumpModel: PumpModel) {
+    private func handleNewHistoryEvents(events: [TimestampedHistoryEvent]) {
         // TODO: get insulin doses from history
         // TODO: upload events to Nightscout
+        let pumpModel = rileyLinkManager.pumpState!.pumpModel!
         let source = "rileylink://medtronic/\(pumpModel)"
         if Config.sharedInstance().uploadEnabled {
             nightscoutUploader.processPumpEvents(events, source: source, pumpModel: pumpModel)

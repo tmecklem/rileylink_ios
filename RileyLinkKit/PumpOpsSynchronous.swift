@@ -325,7 +325,7 @@ class PumpOpsSynchronous {
         return results
     }
     
-    internal func getHistoryEventsSinceDate(startDate: NSDate) throws -> ([TimestampedHistoryEvent], PumpModel) {
+    internal func getHistoryEventsSinceDate(startDate: NSDate) throws -> ([TimestampedHistoryEvent]) {
         try wakeup()
         
         let pumpModel = try getPumpModel()
@@ -346,11 +346,11 @@ class PumpOpsSynchronous {
                     timestamp.timeZone = pump.timeZone
 
                     if let date = timestamp.date?.dateByAddingTimeInterval(timeAdjustmentInterval) {
-                        if date.compare(startDate) == .OrderedAscending  {
+                        if date.compare(startDate) == .OrderedDescending  {
+                            events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), atIndex: 0)
+                        } else {
                             NSLog("Found event (%@) before startDate(%@)", date, startDate);
                             break pages
-                        } else {
-                            events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), atIndex: 0)
                         }
                     }
                 }
@@ -360,7 +360,7 @@ class PumpOpsSynchronous {
                 }
             }
         }
-        return (events, pumpModel)
+        return events
     }
     
     private func getHistoryPage(pageNum: Int) throws -> NSData {
