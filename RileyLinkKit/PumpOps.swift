@@ -97,11 +97,11 @@ public class PumpOps {
     }
 
     /**
-     Fetches history entries which occurred after the specified date.
+     Fetches history entries which occurred on or after the specified date.
  
      History timestamps are reconciled with UTC based on the `timeZone` property of PumpState, as well as recorded clock change events.
 
-     - parameter startDate:  The date after which events must have occurred
+     - parameter startDate:  The earliest date of events to retrieve
      - parameter completion: A closure called after the command is complete. This closure takes a single Result argument:
         - Success(events): An array of fetched history entries
         - Failure(error):  An error describing why the command failed

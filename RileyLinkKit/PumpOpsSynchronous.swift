@@ -346,11 +346,11 @@ class PumpOpsSynchronous {
                     timestamp.timeZone = pump.timeZone
 
                     if let date = timestamp.date?.dateByAddingTimeInterval(timeAdjustmentInterval) {
-                        if date.compare(startDate) == .OrderedDescending  {
-                            events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), atIndex: 0)
-                        } else {
+                        if date.compare(startDate) == .OrderedAscending  {
                             NSLog("Found event (%@) before startDate(%@)", date, startDate);
                             break pages
+                        } else {
+                            events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), atIndex: 0)
                         }
                     }
                 }
