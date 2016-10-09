@@ -428,6 +428,88 @@ class PumpOpsSynchronous {
         return results
     }
     
+    internal func getGlucoseHistoryEvents(since startDate: Date) throws -> ([TimestampedHistoryEvent], PumpModel) {
+        try wakeup()
+        
+        let pumpModel = try getPumpModel()
+        
+        var events = [TimestampedHistoryEvent]()
+        var timeAdjustmentInterval: TimeInterval = 0
+        
+        // Going to scan backwards in time through events, so event time should be monotonically decreasing.
+        // Exceptions are Square Wave boluses, which can be out of order in the pump history by up
+        // to 8 hours on older pumps, and Normal Boluses, which can be out of order by roughly 4 minutes.
+        let eventTimestampDeltaAllowance: TimeInterval
+        if pumpModel.appendsSquareWaveToHistoryOnStartOfDelivery {
+            eventTimestampDeltaAllowance = TimeInterval(minutes: 10)
+        } else {
+            eventTimestampDeltaAllowance = TimeInterval(hours: 9)
+        }
+        
+        // Start with some time in the future, to account for the condition when the pump's clock is ahead
+        // of ours by a small amount.
+        var timeCursor = Date(timeIntervalSinceNow: TimeInterval(minutes: 60))
+        
+        // Prevent returning duplicate content, which is possible e.g. in the case of rapid RF temp basal setting
+        var seenEventData = Set<Data>()
+        
+        pages: for pageNum in 0..<1 {
+            NSLog("Fetching page %d", pageNum)
+            let pageData: Data
+            
+            do {
+                pageData = try getGlucoseHistoryPage(pageNum)
+            } catch let error as PumpCommsError {
+                // Should this be different for an empy glucose history page?
+                if case .unexpectedResponse(let response, from: _) = error, response.messageType == .emptyHistoryPage {
+                    break pages
+                } else {
+                    throw error
+                }
+            }
+            
+            var idx = 0
+            let chunkSize = 256;
+            while idx < pageData.count {
+                let top = min(idx + chunkSize, pageData.count)
+                let range = Range(uncheckedBounds: (lower: idx, upper: top))
+                NSLog(String(format: "GlucoseHistoryPage %02d - (bytes %03d-%03d): ", pageNum, idx, top-1) + pageData.subdata(in: range).hexadecimalString)
+                idx = top
+            }
+            
+            let page = try GlucoseHistoryPage(pageData: pageData, pumpModel: pumpModel)
+            
+            for event in page.events.reversed() {
+                if let event = event as? TimestampedPumpEvent, !seenEventData.contains(event.rawData) {
+                    seenEventData.insert(event.rawData)
+                    
+                    var timestamp = event.timestamp
+                    timestamp.timeZone = pump.timeZone
+                    
+                    if let date = timestamp.date?.addingTimeInterval(timeAdjustmentInterval) {
+                        if date.timeIntervalSince(startDate) < -eventTimestampDeltaAllowance {
+                            NSLog("Found event at (%@) to be more than %@s before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate);
+                            break pages
+                        } else if date.timeIntervalSince(timeCursor) > eventTimestampDeltaAllowance {
+                            NSLog("Found event (%@) out of order in history. Ending history fetch.", date as NSDate)
+                            break pages
+                        } else {
+                            if (date.compare(startDate) != .orderedAscending) {
+                                timeCursor = date
+                            }
+                            events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), at: 0)
+                        }
+                    }
+                }
+                
+                if let event = event as? ChangeTimePumpEvent {
+                    timeAdjustmentInterval += event.adjustmentInterval
+                }
+            }
+        }
+        return (events, pumpModel)
+    }
+    
     internal func getHistoryEvents(since startDate: Date) throws -> ([TimestampedHistoryEvent], PumpModel) {
         try wakeup()
         
@@ -507,6 +589,42 @@ class PumpOpsSynchronous {
             }
         }
         return (events, pumpModel)
+    }
+    
+    private func getGlucoseHistoryPage(_ pageNum: Int) throws -> Data {
+        var frameData = Data()
+        
+        let msg = makePumpMessage(to: .getGlucoseHistoryPage, using: GetGlucoseHistoryPageMessageBody(pageNum: pageNum))
+        
+        let firstResponse = try runCommandWithArguments(runCommandWithArguments(msg, responseMessageType: .getGlucoseHistoryPage))
+        
+        var expectedFrameNum = 1
+        var curResp = firstResponse.messageBody as! GetGlucoseHistoryPageMessageBody
+        
+        while(expectedFrameNum == curResp.frameNumber) {
+            frameData.append(curResp.frame)
+            expectedFrameNum += 1
+            let msg = makePumpMessage(to: .pumpAck)
+            if !curResp.lastFrame {
+                guard let resp = try? sendAndListen(msg) else {
+                    throw PumpCommsError.rfCommsFailure("Did not receive frame data from pump")
+                }
+                guard resp.packetType == .carelink && resp.messageType == .getGlucoseHistoryPage else {
+                    throw PumpCommsError.rfCommsFailure("Bad packet type or message type. Possible interference.")
+                }
+                curResp = resp.messageBody as! GetGlucoseHistoryPageMessageBody
+            } else {
+                let cmd = SendPacketCmd()
+                cmd.packet = RFPacket(data: msg.txData)
+                session.doCmd(cmd, withTimeoutMs: expectedMaxBLELatencyMS)
+                break
+            }
+        }
+        
+        guard frameData.count == 1024 else {
+            throw PumpCommsError.rfCommsFailure("Short glucose history page: \(frameData.count) bytes. Expected 1024")
+        }
+        return frameData as Data
     }
     
     private func getHistoryPage(_ pageNum: Int) throws -> Data {

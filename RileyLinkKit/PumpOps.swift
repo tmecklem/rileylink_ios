@@ -155,11 +155,11 @@ public class PumpOps {
      
      */
     public func getGlucoseHistoryEvents(since startDate: Date, completion: @escaping (Either<(events: [TimestampedHistoryEvent], pumpModel: PumpModel), Error>) -> Void) {
-        device.runSession(withName: "Get history events") { (session) -> Void in
-            NSLog("History fetching task started.")
+        device.runSession(withName: "Get glucose history events") { (session) -> Void in
+            NSLog("Glucose history fetching task started.")
             let ops = PumpOpsSynchronous(pumpState: self.pumpState, session: session)
             do {
-                let (events, pumpModel) = try ops.getHistoryEvents(since: startDate)
+                let (events, pumpModel) = try ops.getGlucoseHistoryEvents(since: startDate)
                 DispatchQueue.main.async { () -> Void in
                     completion(.success(events: events, pumpModel: pumpModel))
                 }

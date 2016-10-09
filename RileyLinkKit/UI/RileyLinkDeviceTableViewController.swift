@@ -459,11 +459,12 @@ public class RileyLinkDeviceTableViewController: UITableViewController, TextFiel
             case .fetchGlucose:
                 vc = CommandResponseViewController { [unowned self] (completionHandler) -> String in
                     let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
-                    let oneDayAgo = calendar.date(byAdding: DateComponents(day: -1), to: Date())
-                    self.device.ops?.getGlucoseHistoryEvents(since: oneDayAgo!) { (response) -> Void in
+                    //let oneDayAgo = calendar.date(byAdding: DateComponents(day: -1), to: Date())
+                    let oneHourAgo = calendar.date(byAdding: DateComponents(hour: -10), to: Date())
+                    self.device.ops?.getGlucoseHistoryEvents(since: oneHourAgo!) { (response) -> Void in
                         switch response {
                         case .success(let (events, _)):
-                            var responseText = String(format:"Found %d events since %@", events.count, oneDayAgo! as NSDate)
+                            var responseText = String(format:"Found %d events since %@", events.count, oneHourAgo! as NSDate)
                             for event in events {
                                 responseText += String(format:"\nEvent: %@", event.dictionaryRepresentation)
                             }

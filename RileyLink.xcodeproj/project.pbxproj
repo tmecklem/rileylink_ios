@@ -86,6 +86,13 @@
 		43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */; };
 		43F348061D596270009933DC /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F348051D596270009933DC /* HKUnit.swift */; };
 		43FF221C1CB9B9DE00024F30 /* NSDateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */; };
+		54085D821DA9B9E4000B8F37 /* GlucoseHistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54085D801DA9B9E4000B8F37 /* GlucoseHistoryPage.swift */; };
+		54085D851DA9BBCE000B8F37 /* PumpGlucoseEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54085D831DA9BBCE000B8F37 /* PumpGlucoseEventType.swift */; };
+		54085D8D1DA9BF4A000B8F37 /* PlaceholderPumpGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54085D8B1DA9BF4A000B8F37 /* PlaceholderPumpGlucoseEvent.swift */; };
+		549E95CE1DA9C543008D655C /* GlucoseHistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54085D801DA9B9E4000B8F37 /* GlucoseHistoryPage.swift */; };
+		549E95CF1DA9C549008D655C /* PumpGlucoseEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54085D831DA9BBCE000B8F37 /* PumpGlucoseEventType.swift */; };
+		549E95D01DA9C553008D655C /* PlaceholderPumpGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54085D8B1DA9BF4A000B8F37 /* PlaceholderPumpGlucoseEvent.swift */; };
+		54EDBA041DA49EF800A64B00 /* GetGlucoseHistoryPageMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EDBA031DA49EF800A64B00 /* GetGlucoseHistoryPageMessageBody.swift */; };
 		C10AB08D1C855613000F102E /* FindDeviceMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */; };
 		C10AB08F1C855F34000F102E /* DeviceLinkMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */; };
 		C10D9BC41C8269D500378342 /* MinimedKit.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D9BC31C8269D500378342 /* MinimedKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -470,6 +477,10 @@
 		43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		43F348051D596270009933DC /* HKUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKUnit.swift; sourceTree = "<group>"; };
 		43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateComponents.swift; sourceTree = "<group>"; };
+		54085D801DA9B9E4000B8F37 /* GlucoseHistoryPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseHistoryPage.swift; sourceTree = "<group>"; };
+		54085D831DA9BBCE000B8F37 /* PumpGlucoseEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpGlucoseEventType.swift; sourceTree = "<group>"; };
+		54085D8B1DA9BF4A000B8F37 /* PlaceholderPumpGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaceholderPumpGlucoseEvent.swift; path = PumpGlucoseEvents/PlaceholderPumpGlucoseEvent.swift; sourceTree = "<group>"; };
+		54EDBA031DA49EF800A64B00 /* GetGlucoseHistoryPageMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetGlucoseHistoryPageMessageBody.swift; sourceTree = "<group>"; };
 		C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindDeviceMessageBody.swift; sourceTree = "<group>"; };
 		C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLinkMessageBody.swift; sourceTree = "<group>"; };
 		C10D9BC11C8269D500378342 /* MinimedKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MinimedKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -864,15 +875,25 @@
 			path = Crypto;
 			sourceTree = "<group>";
 		};
+		54085D8A1DA9BF11000B8F37 /* PumpGlucoseEvents */ = {
+			isa = PBXGroup;
+			children = (
+				54085D8B1DA9BF4A000B8F37 /* PlaceholderPumpGlucoseEvent.swift */,
+			);
+			name = PumpGlucoseEvents;
+			sourceTree = "<group>";
+		};
 		C10D9BC21C8269D500378342 /* MinimedKit */ = {
 			isa = PBXGroup;
 			children = (
+				54085D8A1DA9BF11000B8F37 /* PumpGlucoseEvents */,
 				C1EAD6B81C826B92006DBA60 /* Extensions */,
 				C1EAD6BC1C826B92006DBA60 /* Messages */,
 				C1842BB91C8E15C600DB42AC /* PumpEvents */,
 				C1EAD6AE1C826B6D006DBA60 /* AlertType.swift */,
 				C1EAD6DD1C82B78C006DBA60 /* CRC8.swift */,
 				C1EAD6E11C82BA7A006DBA60 /* CRC16.swift */,
+				54085D801DA9B9E4000B8F37 /* GlucoseHistoryPage.swift */,
 				C1EB955C1C887FE5002517DF /* HistoryPage.swift */,
 				C10D9BC51C8269D500378342 /* Info.plist */,
 				C1EAD6AF1C826B6D006DBA60 /* MessageBody.swift */,
@@ -880,6 +901,7 @@
 				C1C3578E1C927303009BDD4F /* MeterMessage.swift */,
 				C10D9BC31C8269D500378342 /* MinimedKit.h */,
 				C1EAD6B11C826B6D006DBA60 /* PacketType.swift */,
+				54085D831DA9BBCE000B8F37 /* PumpGlucoseEventType.swift */,
 				C1842BBE1C8E855A00DB42AC /* PumpEventType.swift */,
 				C1EAD6B21C826B6D006DBA60 /* PumpMessage.swift */,
 				C1842BBA1C8E184300DB42AC /* PumpModel.swift */,
@@ -1298,6 +1320,7 @@
 				C10AB08E1C855F34000F102E /* DeviceLinkMessageBody.swift */,
 				C10AB08C1C855613000F102E /* FindDeviceMessageBody.swift */,
 				C1711A5B1C953F3000CB25BD /* GetBatteryCarelinkMessageBody.swift */,
+				54EDBA031DA49EF800A64B00 /* GetGlucoseHistoryPageMessageBody.swift */,
 				C1711A5D1C977BD000CB25BD /* GetHistoryPageCarelinkMessageBody.swift */,
 				C1711A591C952D2900CB25BD /* GetPumpModelCarelinkMessageBody.swift */,
 				C1EAD6BE1C826B92006DBA60 /* MySentryAckMessageBody.swift */,
@@ -1615,9 +1638,11 @@
 						LastSwiftMigration = 0800;
 					};
 					C12EA236198B436800309FA4 = {
+						DevelopmentTeam = MQG6YWU66D;
 						LastSwiftMigration = 0800;
 					};
 					C12EA251198B436800309FA4 = {
+						DevelopmentTeam = MQG6YWU66D;
 						TestTargetID = C12EA236198B436800309FA4;
 					};
 					C1B3830A1CD0665D00CE7782 = {
@@ -1824,6 +1849,7 @@
 				C1842BC51C8F897E00DB42AC /* BasalProfileStartPumpEvent.swift in Sources */,
 				C14FFC4A1D3AF1AC0049CF85 /* JournalEntryInsulinMarkerPumpEvent.swift in Sources */,
 				C1842C081C8FA45100DB42AC /* ChangeWatchdogMarriageProfilePumpEvent.swift in Sources */,
+				549E95D01DA9C553008D655C /* PlaceholderPumpGlucoseEvent.swift in Sources */,
 				C1842BFF1C8FA45100DB42AC /* DailyTotal522PumpEvent.swift in Sources */,
 				C1842C1A1C8FA45100DB42AC /* ChangeBolusReminderTimePumpEvent.swift in Sources */,
 				C12198B31C8F730700BC374C /* BolusWizardEstimatePumpEvent.swift in Sources */,
@@ -1831,6 +1857,7 @@
 				C1842BC11C8E8B2500DB42AC /* UnabsorbedInsulinPumpEvent.swift in Sources */,
 				C1EAD6B51C826B6D006DBA60 /* MessageType.swift in Sources */,
 				C1842C111C8FA45100DB42AC /* ChangeParadigmLinkIDPumpEvent.swift in Sources */,
+				549E95CF1DA9C549008D655C /* PumpGlucoseEventType.swift in Sources */,
 				C1C3578F1C927303009BDD4F /* MeterMessage.swift in Sources */,
 				C1842BFC1C8FA45100DB42AC /* SuspendPumpEvent.swift in Sources */,
 				C1842C131C8FA45100DB42AC /* ChangeMaxBolusPumpEvent.swift in Sources */,
@@ -1872,6 +1899,7 @@
 				C1842C231C8FA45100DB42AC /* ChangeAlarmClockEnablePumpEvent.swift in Sources */,
 				C1EAD6CF1C826B92006DBA60 /* UnknownMessageBody.swift in Sources */,
 				C1842C161C8FA45100DB42AC /* ChangeCarbUnitsPumpEvent.swift in Sources */,
+				549E95CE1DA9C543008D655C /* GlucoseHistoryPage.swift in Sources */,
 				C1842C241C8FA45100DB42AC /* BatteryPumpEvent.swift in Sources */,
 				C1842C1F1C8FA45100DB42AC /* ChangeBasalProfilePatternPumpEvent.swift in Sources */,
 				C1711A561C94F13400CB25BD /* ButtonPressCarelinkMessageBody.swift in Sources */,
@@ -1883,6 +1911,7 @@
 				C1842C071C8FA45100DB42AC /* ClearAlarmPumpEvent.swift in Sources */,
 				43B0ADC21D12454700AAD278 /* TimestampedHistoryEvent.swift in Sources */,
 				C1EAD6C91C826B92006DBA60 /* MySentryAckMessageBody.swift in Sources */,
+				54EDBA041DA49EF800A64B00 /* GetGlucoseHistoryPageMessageBody.swift in Sources */,
 				C1EAD6CE1C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift in Sources */,
 				C12198AD1C8F332500BC374C /* TimestampedPumpEvent.swift in Sources */,
 				C1EAD6DE1C82B78C006DBA60 /* CRC8.swift in Sources */,
@@ -1934,6 +1963,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54085D821DA9B9E4000B8F37 /* GlucoseHistoryPage.swift in Sources */,
+				54085D851DA9BBCE000B8F37 /* PumpGlucoseEventType.swift in Sources */,
 				C12198631C8DF4C800BC374C /* HistoryPageTests.swift in Sources */,
 				43A068EC1CF6BA6900F9EFE4 /* ReadRemainingInsulinMessageBodyTests.swift in Sources */,
 				C1EAD6D61C826C43006DBA60 /* MySentryPumpStatusMessageBodyTests.swift in Sources */,
@@ -1950,6 +1981,7 @@
 				C1EAD6D71C826C43006DBA60 /* NSDataTests.swift in Sources */,
 				C143031A1C9A610B00A40450 /* GetBatteryCarelinkMessageBodyTests.swift in Sources */,
 				43CA93351CB9727F000026B5 /* ChangeTempBasalCarelinkMessageBodyTests.swift in Sources */,
+				54085D8D1DA9BF4A000B8F37 /* PlaceholderPumpGlucoseEvent.swift in Sources */,
 				C1EAD6E01C82B910006DBA60 /* CRC8Tests.swift in Sources */,
 				43CA93331CB9726A000026B5 /* ChangeTimeCarelinMessageBodyTests.swift in Sources */,
 				C1EAD6DC1C82A4AB006DBA60 /* RFToolsTests.swift in Sources */,
@@ -2568,10 +2600,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = MQG6YWU66D;
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.rlapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.amecklem.rlapp;
 				PRODUCT_NAME = RileyLink;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RileyLink/RileyLink-Bridging-Header.h";
@@ -2589,10 +2621,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = MQG6YWU66D;
 				INFOPLIST_FILE = "RileyLink/RileyLink-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.rlapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.amecklem.rlapp;
 				PRODUCT_NAME = RileyLink;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "RileyLink/RileyLink-Bridging-Header.h";
@@ -2607,7 +2639,7 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = MQG6YWU66D;
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2625,7 +2657,7 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RileyLink.app/RileyLink";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = MQG6YWU66D;
 				INFOPLIST_FILE = "RileyLinkTests/RileyLinkTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rileylink.${PRODUCT_NAME:rfc1034identifier}";
