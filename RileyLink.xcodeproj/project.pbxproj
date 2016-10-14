@@ -86,6 +86,7 @@
 		43EC9DCB1B786C6200DB0D18 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */; };
 		43F348061D596270009933DC /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F348051D596270009933DC /* HKUnit.swift */; };
 		43FF221C1CB9B9DE00024F30 /* NSDateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */; };
+		5405E5C01DB0529800ED7CC4 /* ReadGlucoseCurrentPageMessageBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5405E5BF1DB0529800ED7CC4 /* ReadGlucoseCurrentPageMessageBody.swift */; };
 		54085D821DA9B9E4000B8F37 /* GlucoseHistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54085D801DA9B9E4000B8F37 /* GlucoseHistoryPage.swift */; };
 		54085D851DA9BBCE000B8F37 /* PumpGlucoseEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54085D831DA9BBCE000B8F37 /* PumpGlucoseEventType.swift */; };
 		54085D8D1DA9BF4A000B8F37 /* PlaceholderPumpGlucoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54085D8B1DA9BF4A000B8F37 /* PlaceholderPumpGlucoseEvent.swift */; };
@@ -477,6 +478,7 @@
 		43EC9DCA1B786C6200DB0D18 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		43F348051D596270009933DC /* HKUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKUnit.swift; sourceTree = "<group>"; };
 		43FF221B1CB9B9DE00024F30 /* NSDateComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateComponents.swift; sourceTree = "<group>"; };
+		5405E5BF1DB0529800ED7CC4 /* ReadGlucoseCurrentPageMessageBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadGlucoseCurrentPageMessageBody.swift; sourceTree = "<group>"; };
 		54085D801DA9B9E4000B8F37 /* GlucoseHistoryPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseHistoryPage.swift; sourceTree = "<group>"; };
 		54085D831DA9BBCE000B8F37 /* PumpGlucoseEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpGlucoseEventType.swift; sourceTree = "<group>"; };
 		54085D8B1DA9BF4A000B8F37 /* PlaceholderPumpGlucoseEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaceholderPumpGlucoseEvent.swift; path = PumpGlucoseEvents/PlaceholderPumpGlucoseEvent.swift; sourceTree = "<group>"; };
@@ -1329,6 +1331,7 @@
 				C1EAD6C11C826B92006DBA60 /* MySentryPumpStatusMessageBody.swift */,
 				C1EAD6C21C826B92006DBA60 /* PowerOnCarelinkMessageBody.swift */,
 				C14303151C97C98000A40450 /* PumpAckMessageBody.swift */,
+				5405E5BF1DB0529800ED7CC4 /* ReadGlucoseCurrentPageMessageBody.swift */,
 				433568751CF67FA800FD9D54 /* ReadRemainingInsulinMessageBody.swift */,
 				C1EAD6C31C826B92006DBA60 /* ReadSettingsCarelinkMessageBody.swift */,
 				43CA932C1CB8CFA1000026B5 /* ReadTempBasalCarelinkMessageBody.swift */,
@@ -1931,6 +1934,7 @@
 				C1842C001C8FA45100DB42AC /* JournalEntryPumpLowReservoirPumpEvent.swift in Sources */,
 				C1842BCF1C8F9E5100DB42AC /* PumpAlarmPumpEvent.swift in Sources */,
 				C1EAD6C61C826B92006DBA60 /* NSData.swift in Sources */,
+				5405E5C01DB0529800ED7CC4 /* ReadGlucoseCurrentPageMessageBody.swift in Sources */,
 				C1842C211C8FA45100DB42AC /* ChangeAlarmNotifyModePumpEvent.swift in Sources */,
 				C1842BC31C8E931E00DB42AC /* BolusNormalPumpEvent.swift in Sources */,
 				43CA932F1CB8CFA1000026B5 /* ReadTimeCarelinkMessageBody.swift in Sources */,

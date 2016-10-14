@@ -29,6 +29,7 @@ public enum MessageType: UInt8 {
     case readTempBasal          = 0x98
     case getGlucoseHistoryPage  = 0x9A
     case readSettings           = 0xc0
+    case readGlucoseCurrentPage = 0xcd
     case readPumpStatus         = 0xce
     
     var bodyType: MessageBody.Type {
@@ -63,6 +64,8 @@ public enum MessageType: UInt8 {
             return ReadRemainingInsulinMessageBody.self
         case .readPumpStatus:
             return ReadPumpStatusMessageBody.self
+        case .readGlucoseCurrentPage:
+            return ReadGlucoseCurrentPageMessageBody.self
         case .getGlucoseHistoryPage:
             return GetGlucoseHistoryPageMessageBody.self
         default:

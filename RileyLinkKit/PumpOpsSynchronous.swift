@@ -458,7 +458,7 @@ class PumpOpsSynchronous {
             let pageData: Data
             
             do {
-                pageData = try getGlucoseHistoryPage(pageNum)
+                pageData = try getGlucoseHistoryPage(UInt32(pageNum))
             } catch let error as PumpCommsError {
                 // Should this be different for an empy glucose history page?
                 if case .unexpectedResponse(let response, from: _) = error, response.messageType == .emptyHistoryPage {
@@ -591,7 +591,7 @@ class PumpOpsSynchronous {
         return (events, pumpModel)
     }
     
-    private func getGlucoseHistoryPage(_ pageNum: Int) throws -> Data {
+    private func getGlucoseHistoryPage(_ pageNum: UInt32) throws -> Data {
         var frameData = Data()
         
         let msg = makePumpMessage(to: .getGlucoseHistoryPage, using: GetGlucoseHistoryPageMessageBody(pageNum: pageNum))

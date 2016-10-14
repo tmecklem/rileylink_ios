@@ -23,12 +23,12 @@ public class GetGlucoseHistoryPageMessageBody: CarelinkLongMessageBody {
         super.init(rxData: rxData)
     }
     
-    public required init(pageNum: Int) {
+    public required init(pageNum: UInt32) {
         let numArgs = 1
         lastFrame = false
         frame = Data()
         frameNumber = 0
-        let data = Data(hexadecimalString: String(format: "%02x%02x", numArgs, UInt8(pageNum)))!
+        let data = Data(hexadecimalString: String(format: "%02x%08x", numArgs, pageNum))!
         super.init(rxData: data)!
     }
     
