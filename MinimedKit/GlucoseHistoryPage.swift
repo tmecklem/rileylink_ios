@@ -26,9 +26,12 @@ public class GlucoseHistoryPage {
         
         let pageData = pageData.subdata(in: 0..<1022).reverseBytes()
         
+        NSLog("Reversed: " + pageData.hexadecimalString)
+        
         func matchEvent(_ offset: Int) -> PumpGlucoseEvent? {
             if let eventType = PumpGlucoseEventType(rawValue:(pageData[offset] as UInt8)) {
                 let remainingData = pageData.subdata(in: offset..<pageData.count)
+                NSLog("Found glucose event of type: " + String(describing: eventType))
                 if let event = eventType.eventType.init(availableData: remainingData, pumpModel: pumpModel) {
                     return event
                 }
@@ -47,21 +50,11 @@ public class GlucoseHistoryPage {
                 offset += 1
                 continue
             }
-            guard var event = matchEvent(offset) else {
+            guard let event = matchEvent(offset) else {
                 events = [PumpGlucoseEvent]()
                 throw GlucoseHistoryPageError.unknownEventType(eventType: pageData[offset] as UInt8)
             }
             
-            //if unabsorbedInsulinRecord != nil, var bolus = event as? BolusNormalPumpEvent {
-            //    bolus.unabsorbedInsulinRecord = unabsorbedInsulinRecord
-            //    unabsorbedInsulinRecord = nil
-            //    event = bolus
-            //}
-            //if let event = event as? UnabsorbedInsulinPumpEvent {
-            //    unabsorbedInsulinRecord = event
-            //} else {
-                tempEvents.append(event)
-            //}
             offset += event.length
         }
         events = tempEvents
