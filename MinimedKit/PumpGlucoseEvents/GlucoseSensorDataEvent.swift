@@ -15,7 +15,7 @@ public struct GlucoseSensorDataEvent: PumpGlucoseEvent {
     //public let timestamp: DateComponents
     
     public init?(availableData: Data, pumpModel: PumpModel) {
-        length = 1 // the op byte is the sgv
+        length = 1
         
         guard length <= availableData.count else {
             return nil

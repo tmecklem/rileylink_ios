@@ -14,7 +14,7 @@ public struct PlaceholderPumpGlucoseEvent: PumpGlucoseEvent {
     public let rawData: Data
     
     public init?(availableData: Data, pumpModel: PumpModel) {
-        length = 0
+        length = 1
         
         guard length <= availableData.count else {
             return nil

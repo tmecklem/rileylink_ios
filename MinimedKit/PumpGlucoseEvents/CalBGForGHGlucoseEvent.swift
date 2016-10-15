@@ -27,7 +27,7 @@ public struct CalBGForGHGlucoseEvent: TimestampedPumpGlucoseEvent {
             return Int(availableData[idx] as UInt8)
         }
         
-        timestamp = DateComponents(pumpEventData: availableData, offset: 0)
+        timestamp = DateComponents(pumpEventData: availableData, offset: 1)
         amount = Int(((d(2) & 0b00100000) << 3) | d(4))
     }
     

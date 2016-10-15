@@ -14,14 +14,14 @@ public struct SensorStatusGlucoseEvent: TimestampedPumpGlucoseEvent {
     public let timestamp: DateComponents
     
     public init?(availableData: Data, pumpModel: PumpModel) {
-        length = 4
+        length = 5
         
         guard length <= availableData.count else {
             return nil
         }
         
         rawData = availableData.subdata(in: 0..<length)
-        timestamp = DateComponents(pumpEventData: availableData, offset: 0)
+        timestamp = DateComponents(pumpEventData: availableData, offset: 1)
     }
     
     public var dictionaryRepresentation: [String: Any] {
