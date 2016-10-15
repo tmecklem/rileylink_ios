@@ -115,4 +115,11 @@ extension Data {
         
         return string as String
     }
+    
+    func reverseBytes() -> Data {
+        let byteArray = self.withUnsafeBytes {
+            [UInt8](UnsafeBufferPointer(start: $0, count: self.count))
+        }
+        return Data(bytes: byteArray.reversed())
+    }
 }

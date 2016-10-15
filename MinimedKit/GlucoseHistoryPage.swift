@@ -24,7 +24,7 @@ public class GlucoseHistoryPage {
             throw GlucoseHistoryPageError.invalidCRC
         }
         
-        let pageData = pageData.subdata(in: 0..<1022)
+        let pageData = pageData.subdata(in: 0..<1022).reverseBytes()
         
         func matchEvent(_ offset: Int) -> PumpGlucoseEvent? {
             if let eventType = PumpGlucoseEventType(rawValue:(pageData[offset] as UInt8)) {
