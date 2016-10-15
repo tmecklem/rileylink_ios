@@ -29,14 +29,14 @@ public class GlucoseHistoryPage {
         NSLog("Reversed: " + pageData.hexadecimalString)
         
         func matchEvent(_ offset: Int) -> PumpGlucoseEvent? {
+            let remainingData = pageData.subdata(in: offset..<pageData.count)
             if let eventType = PumpGlucoseEventType(rawValue:(pageData[offset] as UInt8)) {
-                let remainingData = pageData.subdata(in: offset..<pageData.count)
                 NSLog("Found glucose event of type: " + String(describing: eventType))
                 if let event = eventType.eventType.init(availableData: remainingData, pumpModel: pumpModel) {
                     return event
                 }
             }
-            return PumpGlucoseEventType.glucoseSensorDataEvent.eventType.init(availableData: pageData, pumpModel: pumpModel)
+            return PumpGlucoseEventType.glucoseSensorDataEvent.eventType.init(availableData: remainingData, pumpModel: pumpModel)
         }
         
         var offset = 0
@@ -55,6 +55,11 @@ public class GlucoseHistoryPage {
                 throw GlucoseHistoryPageError.unknownEventType(eventType: pageData[offset] as UInt8)
             }
             
+            if event as? DataEndPumpGlucoseEvent != nil {
+                break
+            }
+            
+            tempEvents.append(event)
             offset += event.length
         }
         events = tempEvents
