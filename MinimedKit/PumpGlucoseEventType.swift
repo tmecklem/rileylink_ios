@@ -34,11 +34,12 @@ public enum PumpGlucoseEventType: UInt8 {
     case sensorSync = 0x0d
     case calBGForGH = 0x0e
     case sensorCalFactor = 0x0f
+    case glucoseSensorDataEvent
     
-    public var eventType: PumpEvent.Type {
+    public var eventType: PumpGlucoseEvent.Type {
         switch self {
-//        case .dataEnd:
-//            return DataEndPumpGlucoseEvent.self
+        case .dataEnd:
+            return DataEndPumpGlucoseEvent.self
 //        case .sensorWeakSignal:
 //            return SensorWeakSignalGlucoseEvent.self
 //        case .sensorCal:
@@ -57,6 +58,8 @@ public enum PumpGlucoseEventType: UInt8 {
 //            return CalBGForPHGlucoseEvent.self
 //        case .sensorCalFactor:
 //            return SensorCalFactorGlucoseEvent.self
+        case .glucoseSensorDataEvent:
+            return GlucoseSensorDataEvent.self
         default:
             return PlaceholderPumpGlucoseEvent.self
         }

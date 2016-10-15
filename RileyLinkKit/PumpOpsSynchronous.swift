@@ -453,7 +453,10 @@ class PumpOpsSynchronous {
         // Prevent returning duplicate content, which is possible e.g. in the case of rapid RF temp basal setting
         var seenEventData = Set<Data>()
         
-        pages: for pageNum in 0..<1 {
+        let curPage = try readGlucoseCurrentPage().pageNum
+        
+        pages: for pageNum in (curPage-15)...curPage {
+            
             NSLog("Fetching page %d", pageNum)
             let pageData: Data
             
@@ -591,12 +594,18 @@ class PumpOpsSynchronous {
         return (events, pumpModel)
     }
     
+    private func readGlucoseCurrentPage() throws -> ReadGlucoseCurrentPageMessageBody {
+        let readGlucoseCurrentPageResponse: ReadGlucoseCurrentPageMessageBody = try messageBody(to: .readGlucoseCurrentPage)
+        
+        return readGlucoseCurrentPageResponse
+    }
+    
     private func getGlucoseHistoryPage(_ pageNum: UInt32) throws -> Data {
         var frameData = Data()
         
         let msg = makePumpMessage(to: .getGlucoseHistoryPage, using: GetGlucoseHistoryPageMessageBody(pageNum: pageNum))
         
-        let firstResponse = try runCommandWithArguments(runCommandWithArguments(msg, responseMessageType: .getGlucoseHistoryPage))
+        let firstResponse = try runCommandWithArguments(msg, responseMessageType: .getGlucoseHistoryPage)
         
         var expectedFrameNum = 1
         var curResp = firstResponse.messageBody as! GetGlucoseHistoryPageMessageBody

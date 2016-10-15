@@ -24,7 +24,7 @@ public class GetGlucoseHistoryPageMessageBody: CarelinkLongMessageBody {
     }
     
     public required init(pageNum: UInt32) {
-        let numArgs = 1
+        let numArgs = 4
         lastFrame = false
         frame = Data()
         frameNumber = 0
