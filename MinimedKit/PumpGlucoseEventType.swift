@@ -44,20 +44,20 @@ public enum PumpGlucoseEventType: UInt8 {
 //            return SensorWeakSignalGlucoseEvent.self
 //        case .sensorCal:
 //            return SensorCalGlucoseEvent.self
-//        case .sensorTimestamp:
-//            return SensorTimestampGlucoseEvent.self
-//        case .batteryChange:
-//            return BatteryChangeGlucoseEvent.self
-//        case .sensorStatus:
-//            return SensorStatusGlucoseEvent.self
-//        case .dateTimeChange:
-//            return DateTimeChangeGlucoseEvent.self
-//        case .sensorSync:
-//            return SensorSyncGlucoseEvent.self
-//        case .calBGForGH:
-//            return CalBGForPHGlucoseEvent.self
-//        case .sensorCalFactor:
-//            return SensorCalFactorGlucoseEvent.self
+        case .sensorTimestamp:
+            return SensorTimestampGlucoseEvent.self
+        case .batteryChange:
+            return BatteryChangeGlucoseEvent.self
+        case .sensorStatus:
+            return SensorStatusGlucoseEvent.self
+        case .dateTimeChange:
+            return DateTimeChangeGlucoseEvent.self
+        case .sensorSync:
+            return SensorSyncGlucoseEvent.self
+        case .calBGForGH:
+            return CalBGForGHGlucoseEvent.self
+        case .sensorCalFactor:
+            return SensorCalFactorGlucoseEvent.self
         case .glucoseSensorDataEvent:
             return GlucoseSensorDataEvent.self
         default:

@@ -455,7 +455,7 @@ class PumpOpsSynchronous {
         
         let curPage = try readGlucoseCurrentPage().pageNum
         
-        pages: for pageNum in (curPage-15)...curPage {
+        pages: for pageNum in (curPage - 1)...curPage {
             
             NSLog("Fetching page %d", pageNum)
             let pageData: Data
