@@ -1,18 +1,18 @@
 //
-//  PlaceholderPumpGlucoseEvent.swift
+//  Fokko7GlusoseEvent.swift
 //  RileyLink
 //
-//  Created by Timothy Mecklem on 10/8/16.
+//  Created by Timothy Mecklem on 10/15/16.
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
 import Foundation
 
-
-public struct PlaceholderPumpGlucoseEvent: PumpGlucoseEvent {
+public struct Fokko7GlucoseEvent: RelativeTimestampedGlucoseEvent {
     public let length: Int
     public let rawData: Data
-    
+    public var timestamp: DateComponents
+
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 1
         
@@ -21,18 +21,12 @@ public struct PlaceholderPumpGlucoseEvent: PumpGlucoseEvent {
         }
         
         rawData = availableData.subdata(in: 0..<length)
+        timestamp = DateComponents()
     }
     
     public var dictionaryRepresentation: [String: Any] {
-        let name: String
-        if let type = PumpEventType(rawValue: rawData[0] as UInt8) {
-            name = String(describing: type).components(separatedBy: ".").last!
-        } else {
-            name = "UnknownPumpGlucoseEvent(\(rawData[0] as UInt8))"
-        }
-        
         return [
-            "_type": name,
+            "name": "Fokko-07",
         ]
     }
 }

@@ -8,14 +8,14 @@
 
 import Foundation
 
-public struct CalBGForGHGlucoseEvent: TimestampedPumpGlucoseEvent {
+public struct CalBGForGHGlucoseEvent: PumpGlucoseEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
     public let amount: Int
     
     public init?(availableData: Data, pumpModel: PumpModel) {
-        length = 5
+        length = 6
         
         guard length <= availableData.count else {
             return nil
@@ -27,7 +27,7 @@ public struct CalBGForGHGlucoseEvent: TimestampedPumpGlucoseEvent {
             return Int(availableData[idx] as UInt8)
         }
         
-        timestamp = DateComponents(pumpEventData: availableData, offset: 1)
+        timestamp = DateComponents(glucoseEventBytes: availableData.subdata(in: 2..<length).reverseBytes())
         amount = Int(((d(2) & 0b00100000) << 3) | d(4))
     }
     

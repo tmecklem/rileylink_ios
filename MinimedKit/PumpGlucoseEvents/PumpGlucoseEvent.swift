@@ -20,4 +20,8 @@ public protocol PumpGlucoseEvent : DictionaryRepresentable {
         get
     }
     
+    var timestamp: DateComponents {
+        get
+    }
+    
 }

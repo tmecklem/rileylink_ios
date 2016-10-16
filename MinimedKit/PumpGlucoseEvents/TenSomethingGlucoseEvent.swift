@@ -1,18 +1,18 @@
 //
-//  SensorSyncGlucoseEvent.swift
+//  TenSomethingGlucoseEvent.swift
 //  RileyLink
 //
-//  Created by Timothy Mecklem on 10/14/16.
+//  Created by Timothy Mecklem on 10/15/16.
 //  Copyright © 2016 Pete Schwamb. All rights reserved.
 //
 
 import Foundation
 
-public struct SensorSyncGlucoseEvent: PumpGlucoseEvent {
+public struct TenSomethingGlucoseEvent: PumpGlucoseEvent {
     public let length: Int
     public let rawData: Data
     public let timestamp: DateComponents
-    
+
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 5
         
@@ -26,7 +26,7 @@ public struct SensorSyncGlucoseEvent: PumpGlucoseEvent {
     
     public var dictionaryRepresentation: [String: Any] {
         return [
-            "_type": "SensorSync",
+            "_type": "10-Something",
         ]
     }
 }

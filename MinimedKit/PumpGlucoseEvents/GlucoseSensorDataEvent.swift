@@ -8,11 +8,11 @@
 
 import Foundation
 
-public struct GlucoseSensorDataEvent: PumpGlucoseEvent {
+public struct GlucoseSensorDataEvent: RelativeTimestampedGlucoseEvent {
     public let length: Int
     public let sgv: Int
     public let rawData: Data
-    //public let timestamp: DateComponents
+    public var timestamp: DateComponents
     
     public init?(availableData: Data, pumpModel: PumpModel) {
         length = 1
@@ -23,7 +23,7 @@ public struct GlucoseSensorDataEvent: PumpGlucoseEvent {
         
         rawData = availableData.subdata(in: 0..<length)
         sgv = Int(availableData[0] as UInt8)
-        //timestamp = DateComponents(pumpEventData: availableData, offset: 0)
+        timestamp = DateComponents()
     }
     
     public var dictionaryRepresentation: [String: Any] {
