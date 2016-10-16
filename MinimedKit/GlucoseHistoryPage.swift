@@ -67,17 +67,15 @@ public class GlucoseHistoryPage {
                 throw GlucoseHistoryPageError.unknownEventType(eventType: pageData[offset] as UInt8)
             }
             
-            if event as? DataEndPumpGlucoseEvent != nil {
-                break
-            }
-            
             if let event = event as? RelativeTimestampedGlucoseEvent {
                 eventsNeedingTimestamp.insert(event, at: 0)
-            } else {
+            } else if let event = event as? TimestampReferenceGlucoseEvent {
                 let eventsWithTimestamp = addTimestampsToEvents(startTimestamp: event.timestamp, eventsNeedingTimestamp: eventsNeedingTimestamp).reversed()
                 tempEvents.append(contentsOf: eventsWithTimestamp)
-                tempEvents.append(event)
                 eventsNeedingTimestamp.removeAll()
+                tempEvents.append(event)
+            } else {
+                tempEvents.append(event)
             }
             
             offset += event.length
