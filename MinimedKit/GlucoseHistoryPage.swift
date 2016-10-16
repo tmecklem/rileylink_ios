@@ -24,9 +24,7 @@ public class GlucoseHistoryPage {
             throw GlucoseHistoryPageError.invalidCRC
         }
         
-        let pageData = pageData.subdata(in: 0..<1022).reverseBytes()
-        
-        NSLog("Reversed: " + pageData.hexadecimalString)
+        let pageData = pageData.subdata(in: 0..<1022).reverseBytes() // recent bytes (events) first
         
         func matchEvent(_ offset: Int) -> PumpGlucoseEvent? {
             let remainingData = pageData.subdata(in: offset..<pageData.count)
@@ -36,13 +34,27 @@ public class GlucoseHistoryPage {
                     return event
                 }
             }
+            NSLog("Found glucose event of type: " + String(describing: PumpGlucoseEventType.glucoseSensorDataEvent.eventType))
             return PumpGlucoseEventType.glucoseSensorDataEvent.eventType.init(availableData: remainingData, pumpModel: pumpModel)
+        }
+        
+        func addTimestampsToEvents(startTimestamp: DateComponents, eventsNeedingTimestamp: [RelativeTimestampedGlucoseEvent]) -> [PumpGlucoseEvent] {
+            var eventsWithTimestamps = [PumpGlucoseEvent]()
+            let calendar = Calendar.current
+            var date : Date = calendar.date(from: startTimestamp)!
+            for var event in eventsNeedingTimestamp {
+                date = calendar.date(byAdding: Calendar.Component.minute, value: -5, to: date)!
+                event.timestamp = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+                event.timestamp.calendar = calendar
+                eventsWithTimestamps.append(event)
+            }
+            return eventsWithTimestamps
         }
         
         var offset = 0
         let length = pageData.count
-        //var unabsorbedInsulinRecord: UnabsorbedInsulinPumpEvent?
         var tempEvents = [PumpGlucoseEvent]()
+        var eventsNeedingTimestamp = [RelativeTimestampedGlucoseEvent]()
         
         while offset < length {
             // Slurp up 0's
@@ -59,7 +71,15 @@ public class GlucoseHistoryPage {
                 break
             }
             
-            tempEvents.append(event)
+            if let event = event as? RelativeTimestampedGlucoseEvent {
+                eventsNeedingTimestamp.insert(event, at: 0)
+            } else {
+                let eventsWithTimestamp = addTimestampsToEvents(startTimestamp: event.timestamp, eventsNeedingTimestamp: eventsNeedingTimestamp).reversed()
+                tempEvents.append(contentsOf: eventsWithTimestamp)
+                tempEvents.append(event)
+                eventsNeedingTimestamp.removeAll()
+            }
+            
             offset += event.length
         }
         events = tempEvents

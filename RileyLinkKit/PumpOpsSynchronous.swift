@@ -428,34 +428,34 @@ class PumpOpsSynchronous {
         return results
     }
     
-    internal func getGlucoseHistoryEvents(since startDate: Date) throws -> ([TimestampedHistoryEvent], PumpModel) {
+    internal func getGlucoseHistoryEvents(since startDate: Date) throws -> ([TimestampedGlucoseEvent], PumpModel) {
         try wakeup()
         
         let pumpModel = try getPumpModel()
         
-        var events = [TimestampedHistoryEvent]()
-        var timeAdjustmentInterval: TimeInterval = 0
+        var events = [TimestampedGlucoseEvent]()
+        //let timeAdjustmentInterval: TimeInterval = 0
         
         // Going to scan backwards in time through events, so event time should be monotonically decreasing.
         // Exceptions are Square Wave boluses, which can be out of order in the pump history by up
         // to 8 hours on older pumps, and Normal Boluses, which can be out of order by roughly 4 minutes.
-        let eventTimestampDeltaAllowance: TimeInterval
-        if pumpModel.appendsSquareWaveToHistoryOnStartOfDelivery {
-            eventTimestampDeltaAllowance = TimeInterval(minutes: 10)
-        } else {
-            eventTimestampDeltaAllowance = TimeInterval(hours: 9)
-        }
+        //let eventTimestampDeltaAllowance: TimeInterval
+        //if pumpModel.appendsSquareWaveToHistoryOnStartOfDelivery {
+        //    eventTimestampDeltaAllowance = TimeInterval(minutes: 10)
+        //} else {
+        //    eventTimestampDeltaAllowance = TimeInterval(hours: 9)
+        //}
         
         // Start with some time in the future, to account for the condition when the pump's clock is ahead
         // of ours by a small amount.
-        var timeCursor = Date(timeIntervalSinceNow: TimeInterval(minutes: 60))
+        //var timeCursor = Date(timeIntervalSinceNow: TimeInterval(minutes: 60))
         
         // Prevent returning duplicate content, which is possible e.g. in the case of rapid RF temp basal setting
         var seenEventData = Set<Data>()
         
-        let curPage = try readGlucoseCurrentPage().pageNum
+        //let curPage = try readGlucoseCurrentPage().pageNum
         
-        pages: for pageNum in (curPage - 1)...curPage {
+        pages: for pageNum in 186...186 {
             
             NSLog("Fetching page %d", pageNum)
             let pageData: Data
@@ -483,30 +483,11 @@ class PumpOpsSynchronous {
             let page = try GlucoseHistoryPage(pageData: pageData, pumpModel: pumpModel)
             
             for event in page.events.reversed() {
-                if let event = event as? TimestampedPumpEvent, !seenEventData.contains(event.rawData) {
-                    seenEventData.insert(event.rawData)
-                    
-                    var timestamp = event.timestamp
-                    timestamp.timeZone = pump.timeZone
-                    
-                    if let date = timestamp.date?.addingTimeInterval(timeAdjustmentInterval) {
-                        if date.timeIntervalSince(startDate) < -eventTimestampDeltaAllowance {
-                            NSLog("Found event at (%@) to be more than %@s before startDate(%@)", date as NSDate, String(describing: eventTimestampDeltaAllowance), startDate as NSDate);
-                            break pages
-                        } else if date.timeIntervalSince(timeCursor) > eventTimestampDeltaAllowance {
-                            NSLog("Found event (%@) out of order in history. Ending history fetch.", date as NSDate)
-                            break pages
-                        } else {
-                            if (date.compare(startDate) != .orderedAscending) {
-                                timeCursor = date
-                            }
-                            events.insert(TimestampedHistoryEvent(pumpEvent: event, date: date), at: 0)
-                        }
-                    }
-                }
+                var timestamp = event.timestamp
+                timestamp.timeZone = pump.timeZone
                 
-                if let event = event as? ChangeTimePumpEvent {
-                    timeAdjustmentInterval += event.adjustmentInterval
+                if let date = timestamp.date {
+                    events.insert(TimestampedGlucoseEvent(glucoseEvent: event, date: date), at: 0)
                 }
             }
         }
