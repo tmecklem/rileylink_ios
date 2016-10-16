@@ -451,12 +451,15 @@ class PumpOpsSynchronous {
         //var timeCursor = Date(timeIntervalSinceNow: TimeInterval(minutes: 60))
         
         // Prevent returning duplicate content, which is possible e.g. in the case of rapid RF temp basal setting
-        var seenEventData = Set<Data>()
+        //var seenEventData = Set<Data>()
         
-        //let curPage = try readGlucoseCurrentPage().pageNum
+        let currentGlucosePage = try readGlucoseCurrentPage()
+        let startPage = currentGlucosePage.pageNum
+        //let endPage = startPage - UInt32(currentGlucosePage.glucose)
         
-        pages: for pageNum in 186...186 {
-            
+        //pages: for pageNum in stride(from: startPage, to: endPage, by: -1) {
+        pages: for pageNum in startPage...startPage {
+        
             NSLog("Fetching page %d", pageNum)
             let pageData: Data
             
