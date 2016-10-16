@@ -22,13 +22,14 @@ public struct GlucoseSensorDataEvent: RelativeTimestampedGlucoseEvent {
         }
         
         rawData = availableData.subdata(in: 0..<length)
-        sgv = Int(availableData[0] as UInt8)
+        sgv = Int(availableData[0] as UInt8) * 2
         timestamp = DateComponents()
     }
     
     public var dictionaryRepresentation: [String: Any] {
         return [
             "name": "GlucoseSensorDataEvent",
+            "sgv": sgv
         ]
     }
 }
