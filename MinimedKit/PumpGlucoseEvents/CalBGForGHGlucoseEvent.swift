@@ -27,8 +27,8 @@ public struct CalBGForGHGlucoseEvent: PumpGlucoseEvent {
             return Int(availableData[idx] as UInt8)
         }
         
-        timestamp = DateComponents(glucoseEventBytes: availableData.subdata(in: 2..<length).reverseBytes())
-        amount = Int(((d(2) & 0b00100000) << 3) | d(4))
+        timestamp = DateComponents(glucoseEventBytes: availableData.subdata(in: 1..<5).reverseBytes())
+        amount = Int(((d(3) & 0b00100000) << 3) | d(5))
     }
     
     public var dictionaryRepresentation: [String: Any] {
